@@ -31,3 +31,9 @@ Initializing the memory bank, documenting the existing codebase, and updating th
 
 *   The project has a clear separation of concerns between data acquisition, transformation, and presentation.
 *   The use of shell scripts for automation simplifies the deployment and maintenance processes.
+
+## TODO
+
+- [ ] Detect page Title to include in sitemap for easier LLM choice
+- [ ] Reorganize sites to be modular and trickle up to multi-site
+- [ ] Update readme to point out token savings and call speed savings for online lookup

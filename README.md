@@ -1,12 +1,12 @@
-# mirror-docs
+# mirror-docs 🪞📚
 
 ## Description
 
-This project automates the process of mirroring raw HTML documentation from a given framework, converting it to Markdown, and generating a sitemap for indexing local full-docs references.
+This project automates the process of mirroring raw HTML documentation 🪞 from a given framework, converting it to Markdown ✍️, and generating a sitemap 🗺️ for indexing local full-docs references.
 
-## Usage
+## Usage 🚀
 
-To use the `mirror-docs` CLI tool:
+To use the `mirror-docs` CLI tool ⚙️:
 
 ```bash
 python mirror_docs.py --domain <domain> --docs-path <docs_path> --output-dir <output_dir> --sitemap-file <sitemap_file>
@@ -23,10 +23,10 @@ Example:
 uv run mirror_docs.py --domain https://www.instantdb.com --docs-path /docs --output-dir ./instantdb_docs --sitemap-file sitemap.txt
 ```
 
-## Memory Bank
+## Memory Bank 🧠
 
 The `memory-bank/` directory contains documentation about the project's design, implementation, and progress.
 
-## License
+## License 📜
 
 [MIT](LICENSE)
