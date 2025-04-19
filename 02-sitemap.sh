@@ -1,1 +1,0 @@
-find sites/*/docs_md > sitemap.txt

@@ -6,23 +6,22 @@ This project automates the process of mirroring raw HTML documentation from a gi
 
 ## Usage
 
-1.  Use `00-mirror.sh` to mirror the HTML documentation from a website:
+To use the `mirror-docs` CLI tool:
 
-    ```bash
-    ./00-mirror.sh <domain>
-    ```
+```bash
+python mirror_docs.py --domain <domain> --docs-path <docs_path> --output-dir <output_dir> --sitemap-file <sitemap_file>
+```
 
-2.  Use `01-md.py` to convert the HTML files to Markdown:
+*   `<domain>`: The base domain URL (e.g., `https://www.example.com`).
+*   `<docs_path>`: The specific path on the domain containing the documentation (e.g., `/docs`).
+*   `<output_dir>`: The local directory where the mirrored HTML and generated Markdown will be stored (e.g., `./output`).
+*   `<sitemap_file>`: The name of the output sitemap file (e.g., `sitemap.txt`).
 
-    ```bash
-    python 01-md.py
-    ```
+Example:
 
-3.  Use `02-sitemap.sh` to generate a sitemap:
-
-    ```bash
-    ./02-sitemap.sh
-    ```
+```bash
+uv run mirror_docs.py --domain https://www.instantdb.com --docs-path /docs --output-dir ./instantdb_docs --sitemap-file sitemap.txt
+```
 
 ## Memory Bank
 

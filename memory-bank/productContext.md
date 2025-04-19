@@ -12,7 +12,7 @@ This project aims to solve the problem of fragmented documentation. Developers o
 
 ## How It Should Work
 
-The system should automatically mirror raw HTML documentation from a specified domain, convert it to Markdown format, generate a sitemap, and provide an index of local full-docs references.
+The system will function as a CLI tool (`mirror_docs.py`) that accepts a domain, documentation path, output directory, and sitemap file name as arguments. It will mirror the HTML content, convert it to Markdown, generate a sitemap, and store the results in the specified output directory.
 
 ## User Experience Goals
 

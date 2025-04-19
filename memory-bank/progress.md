@@ -8,9 +8,9 @@
 
 ## What's Left to Build
 
-*   Refine the data acquisition process to ensure reliable mirroring of raw HTML documentation.
-*   Optimize the HTML to Markdown conversion process for accurate and consistent results.
-*   Ensure the sitemap generation process correctly indexes the local full-docs references.
+*   Implement the `mirror_docs.py` CLI script with argument parsing, mirroring, conversion, and sitemap generation.
+*   Test the CLI script with various domains and documentation paths.
+*   Update the `README.md` file with instructions on how to use the new CLI tool.
 
 ## Current Status
 

@@ -2,30 +2,24 @@
 
 ## System Architecture
 
-The system follows a modular architecture, with distinct components for:
-
-*   **Data Acquisition:** Scripts for fetching documentation from various sources (e.g., websites, APIs, file systems).
-*   **Data Transformation:** Processes for converting documentation into a consistent format (e.g., Markdown).
-*   **Storage:** A mechanism for storing the mirrored documentation (e.g., a file system, a database).
-*   **Presentation:** A user interface for browsing and searching the documentation.
+The system will be implemented as a single Python CLI script (`mirror_docs.py`) that encapsulates all functionality.
 
 ## Key Technical Decisions
 
-*   **Markdown as the primary format:** Markdown was chosen for its simplicity, readability, and wide support.
-*   **Python for scripting:** Python is used for data acquisition and transformation due to its rich ecosystem of libraries.
-*   **Shell scripts for automation:** Shell scripts are used for automating tasks such as site generation and sitemap creation.
+*   **Python for CLI and processing:** Python is used for the CLI interface, data acquisition, transformation, and sitemap generation.
+*   **Markdown as the primary format:** Markdown remains the chosen format for its simplicity and wide support.
+*   **argparse for CLI argument parsing:** The `argparse` library will be used to handle command-line arguments.
 
 ## Design Patterns
 
-*   **Adapter Pattern:** Used to adapt different documentation sources to a common interface.
-*   **Strategy Pattern:** Used to implement different transformation strategies for different documentation formats.
+*   **Command Pattern:** The CLI script acts as a command, taking arguments and executing the mirroring, conversion, and sitemap generation process.
 
 ## Component Relationships
 
-The data acquisition components feed data into the data transformation components, which then store the transformed data. The presentation layer retrieves data from the storage layer.
+The script will internally manage the flow of data from mirroring to conversion to sitemap generation.
 
 ## Critical Implementation Paths
 
-*   The `00-mirror.sh` script is responsible for mirroring raw HTML documentation from a specified domain.
-*   The `01-md.py` script is responsible for converting the mirrored HTML to Markdown format.
-*   The `02-sitemap.sh` script is responsible for generating the sitemap for indexing local full-docs references.
+*   The `mirror_docs.py` script will handle all steps: mirroring, conversion, and sitemap generation.
+*   The script will take command-line arguments for domain, documentation path, output directory, and sitemap file name.
+*   The script will use libraries like `requests` or `wget` (via `subprocess`) for mirroring, `readability-lxml` for content extraction, and `markdownify` for HTML to Markdown conversion.

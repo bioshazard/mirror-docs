@@ -3,5 +3,5 @@
 ## Core Requirements and Goals
 
 *   **Project Name:** mirror-docs
-*   **Goal:** To automate the process of mirroring raw HTML documentation from a given framework, converting it to Markdown, and generating a sitemap for indexing local full-docs references.
-*   **Scope:** The project includes scripts for mirroring documentation, converting HTML to Markdown, and generating sitemaps.
+*   **Goal:** To create a reusable Command Line Interface (CLI) tool that mirrors HTML documentation from a specified domain and path, converts it to Markdown, and generates a sitemap file.
+*   **Scope:** The project will consist of a single Python CLI script (`mirror_docs.py`) that handles mirroring, conversion, and sitemap generation, configurable via command-line arguments. The previous shell and Python scripts will be removed.

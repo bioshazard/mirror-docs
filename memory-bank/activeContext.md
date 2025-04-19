@@ -7,12 +7,14 @@ Initializing the memory bank, documenting the existing codebase, and updating th
 ## Recent Changes
 
 *   Created the initial set of memory bank files: `projectbrief.md`, `productContext.md`, `systemPatterns.md`, and `techContext.md`.
+*   Updated the memory bank to reflect the new plan of creating a generalized CLI tool.
 
 ## Next Steps
 
 *   Create the `progress.md` file.
-*   Analyze the existing scripts (`00-mirror.sh`, `01-md.py`, `02-sitemap.sh`) in more detail.
-*   Identify potential areas for improvement and refactoring.
+*   Develop the `mirror_docs.py` script.
+*   Remove the old scripts (`00-mirror.sh`, `01-md.py`, `02-sitemap.sh`).
+*   Update `pyproject.toml` if any new Python dependencies are required.
 
 ## Active Decisions and Considerations
 
