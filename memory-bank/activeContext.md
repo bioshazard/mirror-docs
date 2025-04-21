@@ -29,7 +29,7 @@ Refining the `mirror-docs` tool and documentation to position it as a solution f
 *   Remove the old, now obsolete scripts (`00-mirror.sh`, `01-md.py`, `02-sitemap.sh`) if they still exist.
 *   Update `pyproject.toml` if any new Python dependencies were added (BeautifulSoup was added implicitly via `readability-lxml`, but good to check).
 *   Configured `pyproject.toml` for PyPI publishing.
-*   Created GitHub Actions workflow for automated PyPI publishing.
+*   Created GitHub Actions workflow for automated PyPI publishing using a PyPI token.
 
 ## Active Decisions and Considerations
 

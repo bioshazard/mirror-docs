@@ -1,4 +1,4 @@
-# Progress: mirror-docs
+<!-- # Progress: mirror-docs -->
 
 ## What Works
 
@@ -16,7 +16,7 @@
 *   Classifiers have been added to `pyproject.toml`.
 *   Distribution packages have been generated.
 *   Configured `pyproject.toml` for PyPI publishing.
-*   Created GitHub Actions workflow for automated PyPI publishing.
+*   Created GitHub Actions workflow for automated PyPI publishing using a PyPI token.
 
 ## What's Left to Build
 
