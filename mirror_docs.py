@@ -1,23 +1,41 @@
 import argparse
 import os
 import subprocess
+from urllib.parse import urlparse
 # import requests
 from bs4 import BeautifulSoup # Added for title extraction
 from readability import Document
 from markdownify import markdownify as md
 
-def mirror_docs(domain, docs_path, output_dir, sitemap_file):
+def mirror_docs(url, base_output_dir):
     """
     Mirrors HTML documentation from a specified domain and path,
     converts it to Markdown, and generates a sitemap file.
     """
+    parsed_url = urlparse(url)
+    domain = parsed_url.netloc
+    docs_path = parsed_url.path # Includes leading slash if present
 
-    full_url = domain + docs_path
-    html_output_dir = os.path.join(output_dir, "html")
-    markdown_output_dir = os.path.join(output_dir, "markdown")
+    # Ensure docs_path starts with a slash if it's not empty
+    if docs_path and not docs_path.startswith('/'):
+        docs_path = '/' + docs_path
+    elif not docs_path:
+        docs_path = '/' # Handle case where only domain is given
 
-    os.makedirs(html_output_dir, exist_ok=True)
-    os.makedirs(markdown_output_dir, exist_ok=True)
+    # Define base directories for HTML and Markdown within the main output dir
+    html_base_dir = os.path.join(base_output_dir, "html")
+    markdown_base_dir = os.path.join(base_output_dir, "markdown")
+    sitemap_file = os.path.join(base_output_dir, "sitemap.txt")
+
+    # wget directory prefix should be the base HTML dir; wget creates domain/path inside it
+    wget_output_prefix = html_base_dir
+
+    # The actual directory where wget will place files for this specific domain/path
+    html_content_dir = os.path.join(html_base_dir, domain) # We'll walk this later
+
+    # Ensure base output directories exist
+    os.makedirs(os.path.join(markdown_base_dir, domain), exist_ok=True) # Ensure domain dir exists in markdown too
+    # No need to explicitly create html_content_dir, wget does that
 
     # Mirror the HTML documentation using wget
     try:
@@ -29,28 +47,29 @@ def mirror_docs(domain, docs_path, output_dir, sitemap_file):
             "--adjust-extension",
             "--page-requisites",
             "--no-parent",
+            # Use docs_path directly. wget interprets it relative to the domain.
+            # Need to handle the root path case carefully if docs_path is just '/'
+            # Wget might need specific handling for root mirroring, but let's try this first.
+            # If docs_path is '/', mirroring the whole domain might be too much.
+            # Let's assume docs_path will usually be more specific.
+            # Re-introduce scope limitation based on the parsed path
             "--include-directories=" + docs_path,
-            "--directory-prefix=" + html_output_dir,
+            "--directory-prefix=" + wget_output_prefix, # Base HTML dir
             "--user-agent=mirror-docs/0.1", # Added User-Agent
-            full_url,
+            url, # Use the full input URL
         ]
         print(f"Running wget command: {' '.join(command)}") # Log the command
-        result = subprocess.run(command, capture_output=True, text=True) # Capture output
+        result = subprocess.run(command, capture_output=True, text=True, check=False) # Capture output, don't check=True yet
         print(f"wget stdout:\n{result.stdout}")
         print(f"wget stderr:\n{result.stderr}")
         print(f"wget return code: {result.returncode}")
-        # Allow code 8 (server errors like 404/5xx) as wget often returns this for minor issues during mirroring.
-        if result.returncode == 0 or result.returncode == 8:
-            print(f"Successfully mirrored HTML documentation from {full_url} (wget exit code: {result.returncode})")
+        # Allow code 8 (server errors like 404/5xx) as wget often returns this for minor issues.
+        if result.returncode not in (0, 8):
+             print(f"Warning: wget command finished with exit code {result.returncode} for URL {url}")
+             print(f"stderr: {result.stderr}")
+             # Decide if we should stop. For now, let's continue to try processing what was downloaded.
         else:
-            print(f"Error mirroring HTML documentation from {full_url}. wget exit code: {result.returncode}")
-            print(f"stderr: {result.stderr}")
-            # Consider whether to return or continue based on the error
-            # return # Optional: uncomment to stop on critical wget errors
-    except subprocess.CalledProcessError as e:
-        print(f"Error executing wget: {e}")
-        print(f"stderr: {e.stderr}")
-        # return # Optional: uncomment to stop on critical wget errors
+             print(f"wget command finished for {url} (exit code: {result.returncode})")
     except Exception as e: # Catch other potential errors like file system issues
         print(f"An unexpected error occurred during mirroring: {e}")
         # return # Optional: uncomment to stop
@@ -60,7 +79,13 @@ def mirror_docs(domain, docs_path, output_dir, sitemap_file):
 
     # Convert HTML to Markdown
     print("\n--- Starting HTML to Markdown Conversion ---")
-    for root, _, files in os.walk(html_output_dir):
+    # Walk the specific directory created by wget for this domain/path
+    walk_target_html_dir = os.path.join(html_base_dir, domain)
+    if not os.path.exists(walk_target_html_dir):
+        print(f"Error: wget did not create the expected directory: {walk_target_html_dir}")
+        return # Cannot proceed without the mirrored content
+
+    for root, _, files in os.walk(walk_target_html_dir):
         for file in files:
             if file.endswith(".html"):
                 html_path = os.path.join(root, file)
@@ -79,27 +104,25 @@ def mirror_docs(domain, docs_path, output_dir, sitemap_file):
                     # Convert the HTML to Markdown
                     md_content = md(main_html)
 
-                    # Determine output path
-                    rel_path_dir = os.path.relpath(root, html_output_dir)
+                    # Determine output path relative to the domain-specific HTML dir
+                    rel_path_dir = os.path.relpath(root, walk_target_html_dir)
                     md_filename = os.path.splitext(file)[0] + ".md"
-                    # Construct relative path for sitemap (relative to markdown_output_dir root)
-                    # Example: if root is /output/html/subdir and file is page.html
-                    # rel_path_dir = subdir
-                    # md_filename = page.md
-                    # rel_md_path = subdir/page.md
-                    # Ensure forward slashes for consistency, handle '.' for root files
-                    rel_md_path = os.path.join(rel_path_dir, md_filename).replace(os.path.sep, '/')
-                    if rel_md_path.startswith('./'):
-                        rel_md_path = rel_md_path[2:]
+
+                    # Construct relative path for sitemap (relative to markdown_base_dir)
+                    # Example: domain/rel_path_dir/md_filename
+                    sitemap_rel_md_path = os.path.join(domain, rel_path_dir, md_filename).replace(os.path.sep, '/')
+                    # Remove leading './' if present (e.g., if rel_path_dir is '.')
+                    if sitemap_rel_md_path.startswith(f"{domain}/./"):
+                         sitemap_rel_md_path = sitemap_rel_md_path.replace(f"{domain}/./", f"{domain}/", 1)
 
 
-                    # Construct full path for writing the file
-                    output_folder = os.path.join(markdown_output_dir, rel_path_dir)
+                    # Construct full path for writing the markdown file
+                    output_folder = os.path.join(markdown_base_dir, domain, rel_path_dir)
                     os.makedirs(output_folder, exist_ok=True)
                     md_path = os.path.join(output_folder, md_filename) # Full path for writing
 
-                    # Store data for sitemap (using relative path)
-                    sitemap_data[rel_md_path] = page_title
+                    # Store data for sitemap (using the new relative path including domain)
+                    sitemap_data[sitemap_rel_md_path] = page_title
 
                     with open(md_path, "w", encoding="utf-8") as f:
                         f.write(md_content)
@@ -122,19 +145,23 @@ def mirror_docs(domain, docs_path, output_dir, sitemap_file):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
-        description="Mirrors HTML documentation, converts it to Markdown, and generates a sitemap."
-    )
-    parser.add_argument("--domain", required=True, help="The base domain URL.")
-    parser.add_argument(
-        "--docs-path", required=True, help="The specific path on the domain containing the documentation."
+        description="Mirrors HTML documentation from a URL, converts it to Markdown, and generates a sitemap."
     )
     parser.add_argument(
-        "--output-dir", required=True, help="The local directory where the mirrored HTML and generated Markdown will be stored."
+        "url",
+        help="The full URL to the documentation path to mirror (e.g., https://react.dev/reference/rsc)."
     )
     parser.add_argument(
-        "--sitemap-file", required=True, help="The name of the output sitemap file."
+        "--output-dir",
+        default=".mirror-docs",
+        help="The local directory where mirrored content will be stored. Defaults to '.mirror-docs'."
     )
 
     args = parser.parse_args()
 
-    mirror_docs(args.domain, args.docs_path, args.output_dir, args.sitemap_file)
+    # Basic URL validation
+    if not urlparse(args.url).scheme or not urlparse(args.url).netloc:
+        print(f"Error: Invalid URL provided: {args.url}")
+        exit(1)
+
+    mirror_docs(args.url, args.output_dir)

@@ -1,3 +1,4 @@
 site*
 .venv
 .local_docs
+.mirror-docs
