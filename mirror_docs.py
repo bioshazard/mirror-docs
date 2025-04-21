@@ -130,15 +130,45 @@ def mirror_docs(url, base_output_dir):
                 except Exception as e:
                     print(f"Error processing file {html_path}: {e}")
 
-    # Generate sitemap
+    # Generate sitemap (additive)
     print("\n--- Generating Sitemap ---")
+    all_sitemap_data = {}
+
+    # 1. Read existing sitemap if it exists
+    if os.path.exists(sitemap_file):
+        try:
+            with open(sitemap_file, "r", encoding="utf-8") as f:
+                for line in f:
+                    line = line.strip()
+                    if " :: " in line:
+                        path, title = line.split(" :: ", 1)
+                        all_sitemap_data[path] = title
+            print(f"Read {len(all_sitemap_data)} entries from existing sitemap: {sitemap_file}")
+        except Exception as e:
+            print(f"Warning: Could not read existing sitemap file {sitemap_file}: {e}")
+
+    # 2. Filter out entries for the current domain from existing data
+    current_domain_prefix = domain + "/"
+    filtered_sitemap_data = {
+        path: title for path, title in all_sitemap_data.items()
+        if not path.startswith(current_domain_prefix)
+    }
+    removed_count = len(all_sitemap_data) - len(filtered_sitemap_data)
+    if removed_count > 0:
+        print(f"Removed {removed_count} old entries for domain '{domain}'")
+
+    # 3. Combine filtered existing data with new data for the current domain
+    # New data takes precedence if there were any overlaps (shouldn't happen with filtering)
+    combined_sitemap_data = {**filtered_sitemap_data, **sitemap_data}
+
+    # 4. Write combined sitemap
     try:
         with open(sitemap_file, "w", encoding="utf-8") as f:
             # Sort items by path for consistency
-            for rel_md_path, title in sorted(sitemap_data.items()):
+            for rel_md_path, title in sorted(combined_sitemap_data.items()):
                 # Ensure path uses forward slashes for consistency across OS
                 f.write(f"{rel_md_path.replace(os.path.sep, '/')} :: {title}\n")
-        print(f"Successfully generated sitemap file: {sitemap_file}")
+        print(f"Successfully wrote {len(combined_sitemap_data)} entries to sitemap file: {sitemap_file}")
     except Exception as e:
         print(f"Error writing sitemap file {sitemap_file}: {e}")
 
