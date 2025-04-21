@@ -2,3 +2,6 @@ site*
 .venv
 .local_docs
 .mirror-docs
+mirror_docs.egg-info
+build
+__pycache__

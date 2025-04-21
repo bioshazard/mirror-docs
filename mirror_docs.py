@@ -173,7 +173,7 @@ def mirror_docs(url, base_output_dir):
         print(f"Error writing sitemap file {sitemap_file}: {e}")
 
 
-if __name__ == "__main__":
+def main():
     parser = argparse.ArgumentParser(
         description="Mirrors HTML documentation from a URL, converts it to Markdown, and generates a sitemap."
     )
@@ -195,3 +195,6 @@ if __name__ == "__main__":
         exit(1)
 
     mirror_docs(args.url, args.output_dir)
+
+if __name__ == "__main__":
+    main()

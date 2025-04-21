@@ -3,12 +3,12 @@
 ## What Works
 
 *   The core `mirror_docs.py` CLI script is functional:
-    *   Accepts command-line arguments (`--domain`, `--docs-path`, `--output-dir`, `--sitemap-file`).
-    *   Mirrors HTML documentation using `wget` (with User-Agent and improved error handling).
+    *   Accepts a URL as input.
+    *   Mirrors HTML documentation using `wget` (with User-Agent and improved error handling), limiting scope with `--include-directories`.
     *   Extracts main content using `readability-lxml`.
     *   Converts extracted HTML to Markdown using `markdownify`.
     *   Extracts HTML `<title>` tags using `BeautifulSoup`.
-    *   Generates a `sitemap.txt` file containing relative Markdown paths and corresponding page titles (`path :: title`).
+    *   Generates a `sitemap.txt` file containing relative Markdown paths and corresponding page titles (`path :: title`), merging with existing entries.
     *   Stores mirrored HTML and generated Markdown in the specified output directory structure.
 *   The `README.md` file provides comprehensive usage instructions, explains the benefits (especially for AI integration), and includes an example `.clinerule`.
 *   The memory bank structure is established and being updated.
@@ -17,7 +17,6 @@
 ## What's Left to Build
 
 *   Testing the script with a wider variety of documentation sites to ensure robustness.
-*   Verifying/updating `pyproject.toml` for dependencies (like `beautifulsoup4` which is a dependency of `readability-lxml` but good to be explicit if needed).
 *   Considering future enhancements: dependency checks (`wget`), configuration files, incremental updates, modular site organization.
 
 ## Current Status

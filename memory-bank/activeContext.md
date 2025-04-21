@@ -11,7 +11,12 @@ Refining the `mirror-docs` tool and documentation to position it as a solution f
     *   Modified sitemap generation to include page titles (`path :: title` format).
     *   Added a `User-Agent` string to the `wget` command.
     *   Improved `wget` execution logging and error handling (allowing exit code 8).
+    *   Fixed `ImportError` by removing the duplicate `main()` function and ensuring the correct one is called.
+*   Added `beautifulsoup4` as an explicit dependency in `pyproject.toml`.
+*   Added `mirror_docs.egg-info` to `.gitignore`.
 *   Significantly updated `README.md` to reflect the new positioning, benefits, usage instructions, and provided an example `.clinerule` for AI integration.
+*   Modified sitemap generation to be additive, merging entries from multiple mirrored sites.
+*   Re-introduced `--include-directories` option to limit download scope.
 *   Initialized the memory bank by reading all files.
 
 ## Next Steps
