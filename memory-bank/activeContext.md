@@ -2,19 +2,25 @@
 
 ## Current Work Focus
 
-Initializing the memory bank, documenting the existing codebase, and updating the documentation to reflect the project's intention and design.
+Refining the `mirror-docs` tool and documentation to position it as a solution for creating local, token-efficient documentation mirrors for AI assistant integration. Updating memory bank.
 
 ## Recent Changes
 
-*   Created the initial set of memory bank files: `projectbrief.md`, `productContext.md`, `systemPatterns.md`, and `techContext.md`.
-*   Updated the memory bank to reflect the new plan of creating a generalized CLI tool.
+*   Updated `mirror_docs.py`:
+    *   Added HTML `<title>` extraction using BeautifulSoup.
+    *   Modified sitemap generation to include page titles (`path :: title` format).
+    *   Added a `User-Agent` string to the `wget` command.
+    *   Improved `wget` execution logging and error handling (allowing exit code 8).
+*   Significantly updated `README.md` to reflect the new positioning, benefits, usage instructions, and provided an example `.clinerule` for AI integration.
+*   Initialized the memory bank by reading all files.
 
 ## Next Steps
 
-*   Create the `progress.md` file.
-*   Develop the `mirror_docs.py` script.
-*   Remove the old scripts (`00-mirror.sh`, `01-md.py`, `02-sitemap.sh`).
-*   Update `pyproject.toml` if any new Python dependencies are required.
+*   Update `progress.md` to reflect the current state.
+*   Consider future enhancements (dependency checks, config file, incremental updates).
+*   Test the script with diverse documentation sites.
+*   Remove the old, now obsolete scripts (`00-mirror.sh`, `01-md.py`, `02-sitemap.sh`) if they still exist.
+*   Update `pyproject.toml` if any new Python dependencies were added (BeautifulSoup was added implicitly via `readability-lxml`, but good to check).
 
 ## Active Decisions and Considerations
 
@@ -34,6 +40,6 @@ Initializing the memory bank, documenting the existing codebase, and updating th
 
 ## TODO
 
-- [ ] Detect page Title to include in sitemap for easier LLM choice
+- [X] Detect page Title to include in sitemap for easier LLM choice
 - [ ] Reorganize sites to be modular and trickle up to multi-site
-- [ ] Update readme to point out token savings and call speed savings for online lookup
+- [X] Update readme to point out token savings and call speed savings for online lookup (and AI integration)
