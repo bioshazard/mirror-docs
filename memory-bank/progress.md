@@ -13,6 +13,10 @@
 *   The `README.md` file provides comprehensive usage instructions, explains the benefits (especially for AI integration), and includes an example `.clinerule`.
 *   The memory bank structure is established and being updated.
 *   Project dependencies are managed via `pyproject.toml` and `uv`.
+*   Classifiers have been added to `pyproject.toml`.
+*   Distribution packages have been generated.
+*   Configured `pyproject.toml` for PyPI publishing.
+*   Created GitHub Actions workflow for automated PyPI publishing.
 
 ## What's Left to Build
 

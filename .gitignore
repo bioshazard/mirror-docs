@@ -4,4 +4,5 @@ site*
 .mirror-docs
 mirror_docs.egg-info
 build
+dist
 __pycache__

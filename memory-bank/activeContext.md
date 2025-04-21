@@ -14,6 +14,8 @@ Refining the `mirror-docs` tool and documentation to position it as a solution f
     *   Fixed `ImportError` by removing the duplicate `main()` function and ensuring the correct one is called.
 *   Added `beautifulsoup4` as an explicit dependency in `pyproject.toml`.
 *   Added `mirror_docs.egg-info` to `.gitignore`.
+*   Added classifiers to `pyproject.toml`.
+*   Generated distribution packages using `uv build`.
 *   Significantly updated `README.md` to reflect the new positioning, benefits, usage instructions, and provided an example `.clinerule` for AI integration.
 *   Modified sitemap generation to be additive, merging entries from multiple mirrored sites.
 *   Re-introduced `--include-directories` option to limit download scope.
@@ -26,6 +28,8 @@ Refining the `mirror-docs` tool and documentation to position it as a solution f
 *   Test the script with diverse documentation sites.
 *   Remove the old, now obsolete scripts (`00-mirror.sh`, `01-md.py`, `02-sitemap.sh`) if they still exist.
 *   Update `pyproject.toml` if any new Python dependencies were added (BeautifulSoup was added implicitly via `readability-lxml`, but good to check).
+*   Configured `pyproject.toml` for PyPI publishing.
+*   Created GitHub Actions workflow for automated PyPI publishing.
 
 ## Active Decisions and Considerations
 

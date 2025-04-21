@@ -3,12 +3,29 @@ name = "mirror-docs"
 version = "0.1.0"
 description = "Mirrors HTML documentation to Markdown for AI integration"
 readme = "README.md"
-requires-python = ">=3.13"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+authors = [
+  {name = "Joe Still", email = "joe@bioshazard.com"}
+]
 dependencies = [
     "lxml[html-clean]>=5.3.2",
     "markdownify>=1.1.0",
     "readability-lxml>=0.8.1",
     "beautifulsoup4>=4.12.0",
+]
+
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Topic :: Software Development :: Documentation",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Operating System :: OS Independent",
 ]
 
 [project.scripts]
