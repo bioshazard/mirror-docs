@@ -58,30 +58,11 @@ The generated Markdown files and the `sitemap.txt` are powerful tools for provid
 You can instruct an AI assistant like Cline to leverage these local docs by creating a `.clinerules/local_docs.md` file in your project's root directory with content similar to this:
 
 ```markdown
-# Rule: Prioritize Local Mirrored Documentation
+## Mirror Docs
 
-## Context
+When asked to "read in the docs for XYZ" you must read in `.mirror-docs/sitemap.txt`, then select the likely applicable paths based on the `:: <TITLE>` next to the paths. When you go to read in the relevant docs you have chosen, keep in mind those paths are relative to `.mirror-docs/markdown/`.
 
-This project utilizes `mirror-docs` to maintain local copies of relevant framework/library documentation in the directory specified by `--output-dir` (defaulting to `.mirror-docs/`). This directory contains:
-
-*   `markdown/`: Directory holding subdirectories for each mirrored domain (e.g., `markdown/react.dev/`). These contain the documentation converted to Markdown, preserving the original path structure.
-*   `html/`: Directory holding the original mirrored HTML files, structured similarly to `markdown/`.
-*   `sitemap.txt`: A file listing `domain/path/to/markdown.md :: Page Title`, relative to the `markdown/` directory.
-
-## Instruction
-
-When I ask questions or request code related to a framework/library for which local documentation exists in the mirrored docs directory (`.mirror-docs/` or the custom `--output-dir`):
-
-1.  **Consult the Sitemap:** First, check the `sitemap.txt` in the root of the mirrored docs directory (e.g., `.mirror-docs/sitemap.txt`) to identify potentially relevant documentation pages based on their titles and paths (which include the domain).
-2.  **Read Local Markdown:** If relevant pages are found, prioritize reading the corresponding Markdown file(s) from the `markdown/` directory. Use the `read_file` tool with the path constructed by joining the output directory base and `markdown/` followed by the relative path from the sitemap (e.g., `.mirror-docs/markdown/react.dev/reference/rsc/use-client.md`).
-3.  **Synthesize Answer:** Base your answer or code generation primarily on the information found in the local Markdown files.
-4.  **Fallback:** If the necessary information isn't found locally, you may then resort to general knowledge or external searches, but state that the local docs were consulted first.
-
-**Example Scenario:** If I ask "How do I use the `useState` hook in React?", and the docs were mirrored to the default `.mirror-docs/`, you should:
-    *   Look at `.mirror-docs/sitemap.txt`.
-    *   Find a line like `react.dev/reference/react/useState.md :: useState – React`.
-    *   Read the file `.mirror-docs/markdown/react.dev/reference/react/useState.md`.
-    *   Explain `useState` based on that file's content.
+When asked to "pull down the docs for <url>", go ahead and run `uv run mirror_docs.py <url>`.
 ```
 
 **(Remember to adapt the base path in the rule if you use a custom `--output-dir`).**
