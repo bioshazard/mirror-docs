@@ -23,5 +23,5 @@ jobs:
         run: python -m build
       - name: Publish package
         uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          trusted-publisher: mirror-docs
+        # with:
+        #   trusted-publisher: mirror-docs
